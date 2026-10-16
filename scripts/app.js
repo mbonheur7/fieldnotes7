@@ -148,18 +148,31 @@ function toggleCompleted(id) {
 // Read the search box, filters and sort menu, then redraw everything.
 // If the search pattern is invalid we show a friendly message and list everything.
 function refreshList() {
-  const searchText = document.getElementById("search-input").value;
-  const ignoreCase = document.getElementById("search-case").checked;
-  const result = compileSearch(searchText, ignoreCase);
-  document.getElementById("search-error").textContent = result.error;
+  //update the record list when this page has one.
+  const searchInput = document.getElementById("Search-input")
 
-  updateTagFilter(); // the set of tags may have changed
-  const status = document.getElementById("filter-status").value;
-  const tag = document.getElementById("filter-tag").value;
-  const sortValue = document.getElementById("sort-select").value;
+  if (searchInput) {
+    const searchText = searchInput.value;
+    const ignoreCase = document.getElementById("search-case").checked;
+    const result = compileSearch(searchText, ignoreCase);
 
-  renderTasks(result.regex, status, tag, sortValue);
-  renderDashboard();
+    document.getElementById("search-error").textContent = result.error;
+
+    updateTagFilter();
+
+    const status = document.getElementById("filter-status").value;
+    const tag = document.getElementById("filter-tag").value;
+    const sortValue = document.getElementById("sort-select").value;
+
+    renderTasks(result.regex, status, tag, sortValue);
+  }
+
+  //updating dashB statistics when the page has them
+  const totalStat = document.getElementById("atat-total");
+
+  if (totalStat) {
+    renderDashboard();
+  }
 }
 
 // ---------- Settings ----------
@@ -297,31 +310,65 @@ async function restoreSample() {
 
 // ---------- Connect everything ----------
 
-form.addEventListener("submit", saveTaskFromForm);
-cancelButton.addEventListener("click", resetForm);
-document.getElementById("search-input").addEventListener("input", refreshList);
-document.getElementById("search-case").addEventListener("change", refreshList);
-document.getElementById("filter-status").addEventListener("change", refreshList);
-document.getElementById("filter-tag").addEventListener("change", refreshList);
-document.getElementById("sort-select").addEventListener("change", refreshList);
-document.getElementById("save-settings-button").addEventListener("click", saveSettingsFromForm);
-document.getElementById("export-button").addEventListener("click", exportTasks);
-document.getElementById("restore-button").addEventListener("click", restoreSample);
-document.getElementById("import-file").addEventListener("change", importTasksFromFile);
+//only connect a form if it exisists on the page(current)
+if (form) {
+  form.addEventListener("submit", saveTaskFromForm);
 
-// One listener on the whole list handles every task button.
-// The button's data-action says what to do, data-id says which task.
-taskList.addEventListener("click", function (event) {
-  const button = event.target.closest("button");
-  if (!button) return;
+}
 
-  const action = button.dataset.action;
-  const id = button.dataset.id;
+if (cancelButton) {
+  cancelButton.addEventListener("click", resetForm);
+}
 
-  if (action === "toggle") toggleCompleted(id);
-  if (action === "edit") startEditing(id);
-  if (action === "delete") deleteTask(id);
-});
+const searchInput = document.getElementById("search-input");
+
+if (searchInput) {
+  searchInput.addEventListener("input", refreshList);
+  document.getElementById("search-case").addEventListener("change", refreshList);
+  document.getElementById("filter-status").addEventListener("change", refreshList);
+  document.getElementById("filter-tag").addEventListener("change", refreshList);
+  document.getElementById("sort-select").addEventListener("change", refreshList);
+}
+
+//settings control belongs to the comtrol page
+const saveSettingsButton = document.getElementById("save-settings-button");
+
+if (saveSettingsButton) {
+  saveSettingsButton.addEventListener("click", saveSettingsFromForm);
+}
+
+const exportButton = document.getElementById("export-button");
+
+if (exportButton) {
+  exportButton.addEventListener("click", exportTasks);
+}
+
+const restoreButton = document.getElementById("restore-button");
+
+if (restoreButton) {
+  restoreButton.addEventListener("click", restoreSample);
+}
+
+const importFile = document.getElementById("import-file");
+
+if (importFile) {
+  importFile.addEventListener("change", importTasksFromFile);
+}
+
+//Task butts belongs to the record page
+if (taskList) {
+  taskList.addEventListener("click", function (event) {
+    const button = event.target.closest("button");
+    if (!button) return;
+
+    const action = button.dataset.action;
+    const id = button.dataset.id;
+
+    if (action === "toggle") toggleCompleted(id);
+    if (action === "edit") startEditing(id);
+    if (action === "delete") deleteTask(id);
+  })
+}
 
 // ---------- Start the app ----------
 
@@ -329,11 +376,24 @@ async function startApp() {
   loadSettings();
   try {
     const message = await loadTasks();
-    if (message !== "") showStatus(message);
+    if (message !== "") {
+      showStatus(message);
+    }
   } catch (error) {
-    showStatus("Could not load the sample data. Open the site through a local server (see the README).");
+    showStatus(
+      "Could not load the sample data. Open the site through a local server.");
   }
-  showSettingsInForm();
+
+  const targetInput = document.getElementById("target-input");
+
+  if ("targetInput") {
+    showSettingsInForm();
+  }
+
+  if (form) {
+    resetForm();
+  }
+
   refreshList();
 }
 
