@@ -1,0 +1,14 @@
+[
+  { "id": "task-seed-001", "title": "Psychology essay first draft", "dueDate": "2026-10-09", "durationMinutes": 180, "tag": "Assignment", "completed": true, "createdAt": "2026-10-01T09:00:00.000Z", "updatedAt": "2026-10-09T16:30:00.000Z" },
+  { "id": "task-seed-002", "title": "Read statistics chapters 4 and 5", "dueDate": "2026-10-10", "durationMinutes": 90, "tag": "Reading", "completed": true, "createdAt": "2026-10-02T10:15:00.000Z", "updatedAt": "2026-10-10T11:00:00.000Z" },
+  { "id": "task-seed-003", "title": "Group project planning meeting", "dueDate": "2026-10-12", "durationMinutes": 60, "tag": "Project", "completed": true, "createdAt": "2026-10-03T14:00:00.000Z", "updatedAt": "2026-10-12T15:10:00.000Z" },
+  { "id": "task-seed-004", "title": "Chemistry lab report", "dueDate": "2026-10-13", "durationMinutes": 120, "tag": "Assignment", "completed": false, "createdAt": "2026-10-05T08:30:00.000Z", "updatedAt": "2026-10-05T08:30:00.000Z" },
+  { "id": "task-seed-005", "title": "Prepare marketing presentation slides", "dueDate": "2026-10-14", "durationMinutes": 150, "tag": "Project", "completed": false, "createdAt": "2026-10-06T13:45:00.000Z", "updatedAt": "2026-10-06T13:45:00.000Z" },
+  { "id": "task-seed-006", "title": "Study for Biology midterm", "dueDate": "2026-10-15", "durationMinutes": 240, "tag": "Exam", "completed": false, "createdAt": "2026-10-07T18:00:00.000Z", "updatedAt": "2026-10-07T18:00:00.000Z" },
+  { "id": "task-seed-007", "title": "Return library books", "dueDate": "2026-10-16", "durationMinutes": 30, "tag": "Personal", "completed": false, "createdAt": "2026-10-08T09:20:00.000Z", "updatedAt": "2026-10-08T09:20:00.000Z" },
+  { "id": "task-seed-008", "title": "Read sociology journal articles", "dueDate": "2026-10-18", "durationMinutes": 120, "tag": "Reading", "completed": false, "createdAt": "2026-10-09T12:00:00.000Z", "updatedAt": "2026-10-09T12:00:00.000Z" },
+  { "id": "task-seed-009", "title": "Calculus problem set 6", "dueDate": "2026-10-20", "durationMinutes": 90, "tag": "Assignment", "completed": false, "createdAt": "2026-10-10T17:40:00.000Z", "updatedAt": "2026-10-10T17:40:00.000Z" },
+  { "id": "task-seed-010", "title": "Attend careers fair", "dueDate": "2026-10-22", "durationMinutes": 120, "tag": "Personal", "completed": false, "createdAt": "2026-10-11T10:00:00.000Z", "updatedAt": "2026-10-11T10:00:00.000Z" },
+  { "id": "task-seed-011", "title": "Group presentation rehearsal", "dueDate": "2026-10-24", "durationMinutes": 90, "tag": "Project", "completed": false, "createdAt": "2026-10-12T15:30:00.000Z", "updatedAt": "2026-10-12T15:30:00.000Z" },
+  { "id": "task-seed-012", "title": "Revision plan for final exams", "dueDate": "2026-10-28", "durationMinutes": 300, "tag": "Exam", "completed": false, "createdAt": "2026-10-13T19:00:00.000Z", "updatedAt": "2026-10-13T19:00:00.000Z" }
+]
