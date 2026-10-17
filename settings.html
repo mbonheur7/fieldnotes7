@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | Campus Life Planner</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="scripts/app.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">skip to main content</a>
+
+    <header class="site-header">
+        <h1>Campus life Planner</h1>
+        <p>Plan your tasks, manage your time, and stay on top of campus life.</p>
+
+        <nav aria-label="Main navigation">
+            <ul class="nav-list">
+                <li><a href="about.html">About</a></li>
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="records.html">Records</a></li>
+                <li><a href="task-form.html">Add Task</a></li>
+                <li><a href="settings.html" aria-current="page">Settings</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="main-content">
+        <p id="status-message" class="status-message" aria-live="polite"></p>
+
+        <section id="settings" class="panel">
+            <h2>Settings</h2>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="target-input">Weekly planned-time target (in the selected unit)</label>
+                    <input type="text" id="target-input" inputmode="decimal">
+                    <p class="error-text" id="target-error"></p>
+                </div>
+                <div class="form-group">
+                    <label for="display-unit">Show durations in</label>
+                    <select id="display-unit">
+                        <option value="minutes">Minutes</option>
+                            <option value="hours">Hours</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="button" class="primary-button" id="save-settings-button">Save settings</button>
+
+            <h3>Your data</h3>
+            <div class="button-row">
+                <button type="button" class="secondary-button" id="export-button">Export JSON</button>
+                <button type="button" class="secondary-button" id="restore-button">Restore sample data</button>
+            </div>
+            <div class="form-group">
+                <label for="import-mode">When importing</label>
+                <select id="import-mode">
+                    <option value="merge">Merge: add tasks and keep my current tasks</option>
+                    <option value="replace">Replace: remove my current tasks first</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="import-file">Import tasks from a JSON file</label>
+                <input type="file" id="import-file" accept=".json,application/json">
+                <p class="error-text" id="import-error" role="alert"></p>
+            </div>
+        </section>
+
+    </main>
+    <footer class="site-footer">
+        <p><strong>Settings</strong></p>
+    </footer>
+</body>
+</html>
