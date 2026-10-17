@@ -88,23 +88,14 @@ function editTask(id, title, date, minutes, tag) {
 
 // Put a task's values into the form so the user can change them.
 function startEditing(id) {
-  const task = state.tasks.find(function (t) { return t.id === id; });
+  const task = state.task.find(function (t) {
+    return t.id === id;
+  })
+
   if (!task) return;
 
-  clearFieldErrors();
-  document.getElementById("task-id").value = task.id;
-  document.getElementById("task-title").value = task.title;
-  document.getElementById("task-date").value = task.dueDate;
-  document.getElementById("task-duration").value = task.durationMinutes;
-  document.getElementById("task-unit").value = "minutes";
-  document.getElementById("task-tag").value = task.tag;
-
-  document.getElementById("form-heading").textContent = "Edit Task";
-  document.getElementById("save-button").textContent = "Save changes";
-  cancelButton.hidden = false;
-
-  document.getElementById("task-form-section").scrollIntoView();
-  document.getElementById("task-title").focus();
+  //save the selected task id (in the url)
+  window.location.href = "task-form.html?id=" + encodeURIComponent(task.id);
 }
 
 // Empty the form and switch it back to "Add Task" mode.
@@ -116,6 +107,41 @@ function resetForm() {
   document.getElementById("save-button").textContent = "Add task";
   cancelButton.hidden = true;
   clearFieldErrors();
+}
+
+function loadTaskForEditing() {
+  const params = new URLSearchParams(window.location.search);
+  const taskId = params.get("id");
+
+  //if it has no ID(the url) then thi is a new one.
+  if (!taskId) return;
+
+  const task = state.tasks.find(function (t) {
+    return t.id === taskId;
+  });
+
+  //display a message if the task cnt be found.
+  if (!task) {
+    showStatus("That task could not be found!.");
+    return;
+  }
+
+  //Fill the form with the selected task's information.
+  document.getElementById("task-id").value = task.id;
+  document.getElementById("task-title").value = task.title;
+  document.getElementById("task-date").value = task.dueDate;
+  document.getElementById("task-duration").value = task.durationMinutes;
+  document.getElementById("task-unit").value = "minutes";
+  document,getElementById("task-tag").value = task.tag;
+
+  document.getElementById("form-heading").textContent = "Edit Task";
+  document.getElementById("save-button").textContent = "save changes";
+
+  if (cancelButton) {
+    cancelButton.hidden = false;
+  }
+
+  document.getElementById("task-title").focus();
 }
 
 // ---------- Delete and complete ----------
@@ -149,7 +175,7 @@ function toggleCompleted(id) {
 // If the search pattern is invalid we show a friendly message and list everything.
 function refreshList() {
   //update the record list when this page has one.
-  const searchInput = document.getElementById("Search-input")
+  const searchInput = document.getElementById("search-input")
 
   if (searchInput) {
     const searchText = searchInput.value;
@@ -168,7 +194,7 @@ function refreshList() {
   }
 
   //updating dashB statistics when the page has them
-  const totalStat = document.getElementById("atat-total");
+  const totalStat = document.getElementById("stat-total");
 
   if (totalStat) {
     renderDashboard();
@@ -180,16 +206,27 @@ function refreshList() {
 // Show the saved settings in the Settings form.
 // The target is shown in the chosen unit; it is stored in minutes.
 function showSettingsInForm() {
-  const unit = state.settings.displayUnit;
-  let shown = state.settings.weeklyTargetMinutes;
-  if (unit === "hours") {
-    shown = Math.round((shown / 60) * 100) / 100;
+  const targetInput = document.getElementById("target-input");
+  const displayUnit = document.getElementById("display-unit");
+  const taskIdInput = document.getElementById("task-id");
+  const taskUnit = document.getElementById("tas-unit");
+
+  //update the setting form
+  if (targetInput && displayUnit) {
+    const unit = state.settings.displayUnit;
+    let shown = state.settings.weeklyTargetMinutes;
+
+    if (unit === "hours") {
+      shown = Math.round((shown / 60) * 100) / 100;
+    }
+
+    targetInput.value = shown;
+    displayUnit.value = unit;
   }
-  document.getElementById("target-input").value = shown;
-  document.getElementById("display-unit").value = unit;
-  // New tasks start with the unit the user prefers.
-  if (document.getElementById("task-id").value === "") {
-    document.getElementById("task-unit").value = unit;
+
+  //set tht task forms unit
+  if (taskIdInput && taskUnit && taskIdInput.value === "") {
+    taskUnit.value = state.settings.displayUnit;
   }
 }
 
@@ -374,8 +411,10 @@ if (taskList) {
 
 async function startApp() {
   loadSettings();
+
   try {
     const message = await loadTasks();
+
     if (message !== "") {
       showStatus(message);
     }
@@ -392,6 +431,7 @@ async function startApp() {
 
   if (form) {
     resetForm();
+    loadTaskForEditing();
   }
 
   refreshList();

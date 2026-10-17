@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Task | Campus Life Planner</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="scripts/app.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <header class="site-header">
+        <h1>Campus Life Planner</h1>
+        <p>Plan Your tasks, manage your time, and stay on top of campus lif</p>
+
+        <nav aria-label="Main-navigation">
+            <ul class="nav-list">
+                <li><a href="about.html">About</a></li>
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="records.html">Records</a></li>
+                <li><a href="task-form.html" aria-current="page">Add Task</a></li>
+                <li><a href="settings.html">Settings</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="main-content">
+        <p id="status-message" class="status-message" aria-live="polite"></p>
+
+        <section id="task-form-section" class="panel">
+            <h2 id="form-heading">Add Task</h2>
+            <form id="task-form" novalidate>
+                <input type="hidden" id="task-id">
+
+                <div class="form-group">
+                    <label for="task-title">Title</label>
+                    <input type="text" id="task-title" autocomplete="off">
+                    <p class="error-text" id="title-error"></p>
+                </div>
+
+                <div class="form-group">
+                    <label for="task-date">Due date</label>
+                    <input type="date" id="task-date">
+                    <p class="error-text" id="date-error"></p>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="task-duration">Estimated duration</label>
+                        <input type="text" id="task-duration" inputmode="decimal" placeholder="e.g.90">
+                        <p class="error-text" id="duration-error"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-unit">Unit</label>
+                        <select id="task-unit">
+                            <option value="minutes">Minutes</option>
+                            <option value="hours">Hours</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="task-tag">Tag</label>
+                    <input type="text" id="task-tag" list="tag-options" placeholder="e.g.Assignment">
+                    <datalist id="tag-options">
+                        <option value="Assignment"></option>
+                        <option value="Exam"></option>
+                        <option value="Reading"></option>
+                        <option value="Project"></option>
+                        <option value="Personal"></option>
+                    </datalist>
+                    <p class="error-text" id="target-error"></p>
+                </div>
+
+                <div class="button-row">
+                    <button type="submit" class="primary-button" id="save-button">Add task</button>
+                    <button type="button" class="secondary-button" id="cancel-edit-button" hidden>Cancel editing</button>
+                </div>
+            </form>
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <p><strong>Add your task</strong></p>
+    </footer>
+</body>
+</html>
