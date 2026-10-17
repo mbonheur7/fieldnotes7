@@ -126,11 +126,17 @@ main {
 }
 
 .stat-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
   display: flex;
   flex-direction: column;
   background: var(--blue-light);
   border-radius: var(--radius);
   padding: 0.75rem 1rem;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 18px rgba(32, 59, 87, 0.15);
 }
 
 .stat-label {
@@ -156,6 +162,8 @@ main {
   background: var(--blue);
   height: 100%;
   width: 0;
+  border-radius: 999px;
+  transition: width 0.45 ease;
 }
 
 /* Turns red when planned time goes over the target */

@@ -88,11 +88,14 @@ function editTask(id, title, date, minutes, tag) {
 
 // Put a task's values into the form so the user can change them.
 function startEditing(id) {
-  const task = state.task.find(function (t) {
-    return t.id === id;
-  })
+  const task = state.tasks.find(function (t) {
+    return String(t.id) === id;
+  });
 
-  if (!task) return;
+  if (!task) {
+    showStatus("That status could not be found.");
+    return;
+  }
 
   //save the selected task id (in the url)
   window.location.href = "task-form.html?id=" + encodeURIComponent(task.id);
@@ -132,7 +135,7 @@ function loadTaskForEditing() {
   document.getElementById("task-date").value = task.dueDate;
   document.getElementById("task-duration").value = task.durationMinutes;
   document.getElementById("task-unit").value = "minutes";
-  document,getElementById("task-tag").value = task.tag;
+  document.getElementById("task-tag").value = task.tag;
 
   document.getElementById("form-heading").textContent = "Edit Task";
   document.getElementById("save-button").textContent = "save changes";
@@ -178,19 +181,36 @@ function refreshList() {
   const searchInput = document.getElementById("search-input")
 
   if (searchInput) {
-    const searchText = searchInput.value;
-    const ignoreCase = document.getElementById("search-case").checked;
-    const result = compileSearch(searchText, ignoreCase);
+    const searchCase = document.getElementById("search-case");
+    const searchError = document.getElementById("search-error");
+    const statusFilter = document.getElementById("filter-status");
+    const tagFilter = document.getElementById("filter-tag");
+    const sortSelect = document.getElementById("sort-select");
+    
+    //continue only when all records are present
+    if (
+      searchCase &&
+      searchError &&
+      statusFilter &&
+      tagFilter &&
+      sortSelect 
+    ) {
+      const result = compileSearch(
+        searchInput.value,
+        searchCase.checked
+      );
 
-    document.getElementById("search-error").textContent = result.error;
+      searchError.textContent = result.error;
 
-    updateTagFilter();
+      updateTagFilter();
 
-    const status = document.getElementById("filter-status").value;
-    const tag = document.getElementById("filter-tag").value;
-    const sortValue = document.getElementById("sort-select").value;
-
-    renderTasks(result.regex, status, tag, sortValue);
+      renderTasks(
+        result.regex,
+        statusFilter.value,
+        tagFilter.value,
+        sortSelect.value
+      );
+    }
   }
 
   //updating dashB statistics when the page has them
@@ -209,7 +229,7 @@ function showSettingsInForm() {
   const targetInput = document.getElementById("target-input");
   const displayUnit = document.getElementById("display-unit");
   const taskIdInput = document.getElementById("task-id");
-  const taskUnit = document.getElementById("tas-unit");
+  const taskUnit = document.getElementById("task-unit");
 
   //update the setting form
   if (targetInput && displayUnit) {
@@ -358,13 +378,28 @@ if (cancelButton) {
 }
 
 const searchInput = document.getElementById("search-input");
+const searchCase = document.getElementById("search-case");
+const filterStatus = document.getElementById("filter-status");
+const filterTag = document.getElementById("filter-tag");
+const sortSelect = document.getElementById("sort-select");
 
 if (searchInput) {
   searchInput.addEventListener("input", refreshList);
-  document.getElementById("search-case").addEventListener("change", refreshList);
-  document.getElementById("filter-status").addEventListener("change", refreshList);
-  document.getElementById("filter-tag").addEventListener("change", refreshList);
-  document.getElementById("sort-select").addEventListener("change", refreshList);
+}
+
+if (searchCase) {
+  searchCase.addEventListener("change", refreshList);
+}
+
+if (filterStatus) {
+  filterStatus.addEventListener("change", refreshList);
+}
+
+if (filterTag) {
+  filterTag.addEventListener("change", refreshList);
+}
+if (sortSelect) {
+  sortSelect.addEventListener("change", refreshList);
 }
 
 //settings control belongs to the comtrol page
@@ -425,7 +460,7 @@ async function startApp() {
 
   const targetInput = document.getElementById("target-input");
 
-  if ("targetInput") {
+  if (targetInput) {
     showSettingsInForm();
   }
 

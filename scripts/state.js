@@ -126,7 +126,10 @@ export function getLastSevenDays(tasks, endDate) {
   const days = [];
   for (let i = 6; i >= 0; i--) {
     const day = new Date(end.getFullYear(), end.getMonth(), end.getDate() - i);
-    const dateText = day.toLocaleDateString("en-CA");
+    const dateText = 
+      day.getFullYear() + "-" +
+      String(day.getMonth() + 1).padStart(2, "0") + "-" +
+      String(day.getDate()).padStart(2, "0");
     let minutes = 0;
     for (let j = 0; j < tasks.length; j++) {
       if (tasks[j].dueDate === dateText) minutes += tasks[j].durationMinutes;
