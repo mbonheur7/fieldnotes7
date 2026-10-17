@@ -25,8 +25,16 @@ export function showFieldError(name, message) {
 export function clearFieldErrors() {
   for (let i = 0; i < fieldNames.length; i++) {
     const name = fieldNames[i];
-    document.getElementById(name + "-error").textContent = "";
-    document.getElementById("task-" + name).removeAttribute("aria-invalid");
+    const errorElement = document.getElementById(name + "-error");
+    const inputElement = document.getElementById("task-" + name);
+
+    if (errorElement) {
+      errorElement.textContent = "";
+    }
+
+    if (inputElement) {
+      inputElement.removeAttribute("aria-invalid");
+    }
   }
 }
 
