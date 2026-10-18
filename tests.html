@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Life Planner | Tests</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .test-summary {
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      background: var(--panel, #f3f6fa);
+    }
+
+    .test-results {
+      padding-left: 0;
+      list-style: none;
+    }
+
+    .test-results li {
+      padding: 0.75rem;
+      margin-bottom: 0.5rem;
+      border-radius: 6px;
+      overflow-wrap: anywhere;
+    }
+
+    .test-pass {
+      border-left: 5px solid #238636;
+      background: #edf8ef;
+      color: #173d20;
+    }
+
+    .test-fail {
+      border-left: 5px solid #cf222e;
+      background: #fff0f0;
+      color: #6e1018;
+    }
+
+    .test-error {
+      color: #b42318;
+      overflow-wrap: anywhere;
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="site-header">
+    <h1>Campus Life Planner</h1>
+    <p>Automated checks for application functions</p>
+
+    <nav aria-label="Main navigation">
+      <ul class="nav-list">
+        <li><a href="about.html">About</a></li>
+        <li><a href="index.html">Dashboard</a></li>
+        <li><a href="records.html">Records</a></li>
+        <li><a href="task-form.html">Add Task</a></li>
+        <li><a href="settings.html">Settings</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <section class="panel">
+      <h2>Application Tests</h2>
+      <p>
+        These tests check selected validation, duration conversion,
+        and regular-expression search functions.
+      </p>
+
+      <div id="test-summary" class="test-summary" role="status"
+           aria-live="polite">
+        Tests have not run yet.
+      </div>
+
+      <button id="run-tests" type="button">Run tests again</button>
+
+      <ul id="test-results" class="test-results"
+          aria-label="Test results"></ul>
+
+      <p id="test-error" class="test-error"></p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Campus Life Planner</p>
+  </footer>
+
+  <script type="module">
+    import {
+      validateTitle,
+      validateDate,
+      validateDuration,
+      validateTag,
+      validateTarget
+    } from "./scripts/validators.js";
+
+    import { compileSearch } from "./scripts/search.js";
+    import { toMinutes } from "./scripts/state.js";
+
+    const summary = document.getElementById("test-summary");
+    const resultsList = document.getElementById("test-results");
+    const errorBox = document.getElementById("test-error");
+    const runButton = document.getElementById("run-tests");
+
+    function futureDate(daysAhead) {
+      const date = new Date();
+      date.setDate(date.getDate() + daysAhead);
+
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+
+      return year + "-" + month + "-" + day;
+    }
+
+    function addTest(name, testFunction) {
+      const item = document.createElement("li");
+
+      try {
+        const passed = testFunction();
+
+        if (passed) {
+          item.className = "test-pass";
+          item.textContent = "PASS — " + name;
+          resultsList.appendChild(item);
+          return true;
+        }
+
+        item.className = "test-fail";
+        item.textContent = "FAIL — " + name;
+      } catch (error) {
+        item.className = "test-fail";
+        item.textContent = "ERROR — " + name + ": " + error.message;
+      }
+
+      resultsList.appendChild(item);
+      return false;
+    }
+
+    function runTests() {
+      resultsList.replaceChildren();
+      errorBox.textContent = "";
+
+      let passed = 0;
+      let failed = 0;
+
+      const tests = [
+        [
+          "A normal task title is accepted",
+          () => validateTitle("Study for exams") === ""
+        ],
+        [
+          "An empty task title is rejected",
+          () => validateTitle("").length > 0
+        ],
+        [
+          "A future due date is accepted",
+          () => validateDate(futureDate(2)) === ""
+        ],
+        [
+          "A positive duration in minutes is accepted",
+          () => validateDuration("60", "minutes") === ""
+        ],
+        [
+          "A zero duration is rejected",
+          () => validateDuration("0", "minutes").length > 0
+        ],
+        [
+          "A normal tag is accepted",
+          () => validateTag("Study") === ""
+        ],
+        [
+          "An empty tag is rejected",
+          () => validateTag("").length > 0
+        ],
+        [
+          "A positive weekly target is accepted",
+          () => validateTarget("600", "minutes") === ""
+        ],
+        [
+          "An empty weekly target is rejected",
+          () => validateTarget("", "minutes").length > 0
+        ],
+        [
+          "Two hours converts to 120 minutes",
+          () => toMinutes("2", "hours") === 120
+        ],
+        [
+          "Sixty minutes stays 60 minutes",
+          () => toMinutes("60", "minutes") === 60
+        ],
+        [
+          "Search finds a matching title",
+          () => {
+            const result = compileSearch("python", true);
+            return result.error === "" &&
+              result.regex.test("Study Python");
+          }
+        ],
+        [
+          "Case-insensitive search matches uppercase text",
+          () => {
+            const result = compileSearch("python", true);
+            return result.error === "" &&
+              result.regex.test("PYTHON");
+          }
+        ],
+        [
+          "Invalid regular-expression syntax is reported",
+          () => {
+            const result = compileSearch("[", true);
+            return result.error !== "";
+          }
+        ]
+      ];
+
+      for (const test of tests) {
+        if (addTest(test[0], test[1])) {
+          passed++;
+        } else {
+          failed++;
+        }
+      }
+
+      summary.textContent =
+        "Finished: " + passed + " passed, " +
+        failed + " failed, out of " + tests.length + " tests.";
+
+      if (failed > 0) {
+        errorBox.textContent =
+          "Some tests failed. Review the results above and check the relevant functions.";
+      }
+    }
+
+    runButton.addEventListener("click", runTests);
+    runTests();
+  </script>
+</body>
+</html>
