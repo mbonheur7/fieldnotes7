@@ -160,10 +160,8 @@ Search matches are highlighted using DOM text nodes and `<mark>` elements. The a
 - Clearing the browser's local storage may remove saved tasks and settings.
 - Imported JSON data must follow the application's expected data structure.
 
-## Future Improvements
+## Possible future Improvements
 
 Possible improvements include cloud synchronization, user accounts, reminders, and calendar integration.
 
-## Author
-
-Developed as a student project to demonstrate semantic HTML, responsive CSS, JavaScript modules, DOM manipulation, event handling, regular-expression validation and search, and browser-based data persistence.
+And lastly my unlisted yutube demo video link `https://youtu.be/P7LJ47oYP8g`
