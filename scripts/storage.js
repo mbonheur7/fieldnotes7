@@ -67,7 +67,13 @@ export function saveTasks() {
 
 // Read seed.json from the website folder.
 async function loadSeedTasks() {
-  const response = await fetch("seed.json");
+  const seedUrl = new URL("./seed.json", import.meta.url);
+  const response = await fetch(seedUrl);
+
+  if (!response.ok) {
+    throw new Error("Could not load seed.json: " + response.status);
+  }
+
   const data = await response.json();
   return keepValidTasks(data);
 }
