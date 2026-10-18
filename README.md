@@ -1,4 +1,6 @@
 # Campus Life Planner
+The live site: [Campus Life Planner] https://mbonheur7.github.io/fieldnotes7/
+For automated test you can open `tests.html` through the live website or a local development server to run the test suite.
 
 This is a responsive web application designed to help students organize their academic tasks and manage their time so to stay on top of campus life.
 
@@ -114,6 +116,43 @@ The application can be tested manually by checking:
 - Responsive layouts and keyboard navigation.
 
 The project also includes a `tests.html` page for testing supported application functions.
+
+### There is an automated Test Results
+
+And the test is available at [tests.html](https://mbonheur7.github.io/fieldnotes7/tests.html).
+
+The current test run reports **14 passed, 0 failed**. The tests cover input validation, duration conversion, regular-expression search, and invalid regular-expression handling.
+
+### Regular Expression Validation and Search
+
+The application uses regular expressions (regex) for input validation and task searching.
+
+| Field | Pattern | Purpose |
+
+Field: Title Pattern: `/^[A-Za-z0-9][A-Za-z0-9 .,'&:()\/-]{1,79}$/` Purpose: Requires 2–80 characters, beginning with a letter or number and allowing specified punctuation.
+Field: Duration Pattern: `/^\d+(\.\d{1,2})?$/` Purpose: Accepts whole numbers or decimals with one or two decimal places.
+Field: Date Pattern: `/^\d{4}-\d{2}-\d{2}$/` Purpose: Checks the YYYY-MM-DD date format. The application also verifies that the date exists.
+Field: Tag Pattern: `/^[A-Za-z][A-Za-z -]{1,29}$/` Purpose: Requires 2–30 characters, starting with a letter and allowing letters, spaces, and hyphens.
+Field: Repeated words Pattern: `/\b(\w+)\s+\1\b/i` Purpose: Uses a capturing group and backreference (`\1`) to detect consecutive repeated words, ignoring case.
+
+The search feature compiles user-provided patterns with `new RegExp()`. It supports global matching and an optional case-insensitive mode. A `try...catch` block handles invalid patterns and displays an error message instead of allowing the application to crash.
+
+Search matches are highlighted using DOM text nodes and `<mark>` elements. The application uses `textContent` rather than inserting user-provided text as HTML.
+### Keyboard Navigation
+
+- Use `Tab` to move forward through interactive controls.
+- Use `Shift + Tab` to move backward.
+- Use `Enter` or `Space` to activate supported buttons and links.
+- Use the keyboard controls provided by the browser for form inputs and selection controls.
+
+### Accessibility Notes
+
+- Semantic HTML elements provide meaningful page structure.
+- Form controls have associated labels.
+- Validation errors and important status updates help users understand application feedback.
+- Responsive layouts support desktop and mobile screens.
+- Interactive elements should remain usable with a keyboard.
+
 
 ## Limitations
 
